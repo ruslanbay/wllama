@@ -18,6 +18,7 @@
     "build:minified": "terser esm/index.js -o esm/index.min.js --compress --mangle --source-map",
     "build:typedef": "tsc --emitDeclarationOnly --declaration -p tsconfig.build.json",
     "build": "npm run clean && npm run build:worker && npm run build:tsup && npm run build:minified && npm run build:typedef",
+    "deploy": "npm run clean && cd examples/main && npx tsc -b && npx vite build --outDir ../../docs",
     "postbuild": "./scripts/post_build.sh && npm run docs",
     "docs": "typedoc --tsconfig tsconfig.build.json src/index.ts",
     "upload": "npm run format && npm run build && npm publish --access public",
