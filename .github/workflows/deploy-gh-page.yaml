@@ -32,6 +32,6 @@ jobs:
           git config --local user.name 'github-actions[bot]'
           git config --local user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git checkout --orphan gh-pages
-          git add .
+          git add -f docs/
           git commit -m "Deploy Github Pages"
           git push origin gh-pages --force
