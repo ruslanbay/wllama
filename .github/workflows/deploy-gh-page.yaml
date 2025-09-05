@@ -18,9 +18,11 @@ jobs:
           node-version: '22'
           cache: 'npm'
           check-latest: true
-          
+
       - name: Install dependencies
-        run: npm ci
+        run: |
+          cd examples/main
+          npm ci
         
       - name: Deploy
         run: npm run deploy
