@@ -5,17 +5,20 @@ import ModelScreen from './components/ModelScreen';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import { MessagesProvider } from './utils/messages.context';
+import { MCPProvider } from './utils/mcp.context';
 import { Screen } from './utils/types';
 import { useWllama, WllamaProvider } from './utils/wllama.context';
 import './utils/benchmark';
 
 function App() {
   return (
-    <MessagesProvider>
-      <WllamaProvider>
-        <InnerApp />
-      </WllamaProvider>
-    </MessagesProvider>
+    <MCPProvider>
+      <MessagesProvider>
+        <WllamaProvider>
+          <InnerApp />
+        </WllamaProvider>
+      </MessagesProvider>
+    </MCPProvider>
   );
 }
 

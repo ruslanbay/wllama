@@ -4,6 +4,9 @@ import wllamaMulti from '@wllama/wllama/src/multi-thread/wllama.wasm?url';
 import wllamaPackageJson from '@wllama/wllama/package.json';
 import { InferenceParams } from './utils/types';
 
+// MCP Server Configuration
+export const MCP_SERVER_URL = 'https://mcp.finmap.org/';
+
 export const WLLAMA_VERSION = wllamaPackageJson.version;
 
 export const WLLAMA_CONFIG_PATHS = {
