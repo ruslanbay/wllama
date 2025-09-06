@@ -204,6 +204,7 @@ export const WllamaProvider = ({ children }: any) => {
     sampling: { temp: currParams.temperature },
     // streaming tokens
     onNewToken(token, piece, currentText, optionals) {
+      console.log(token, piece);
       callback(currentText);
       if (stopSignal) optionals.abortSignal();
     },
