@@ -56,7 +56,7 @@ export const MCPProvider = ({ children }: { children: ReactNode }) => {
     if (client) return;
 
     try {
-      const newClient = new Client({ name: 'wllama-client', version: '1.0.0' }, { capabilities: { elicitation: {} } });
+      const newClient = new Client({ name: 'wllama-client', version: '1.0.0' }, { capabilities: { tools: { list: true, call: true }, elicitation: {} } });
 
       newClient.onerror = (error: unknown) => {
         console.error('MCP Client error:', error);
