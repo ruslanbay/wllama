@@ -1,3 +1,4 @@
+import { useMCP } from "./mcp.context";
 import { createContext, useContext, useMemo, useState } from 'react';
 import {
   DebugLogger,
@@ -183,33 +184,88 @@ export const WllamaProvider = ({ children }: any) => {
     setCurrRuntimeInfo(undefined);
   };
 
+
+  
+  // TESTING
+
+  const { callTool } = useMCP();
+
   const createCompletion = async (
-    input: string,
-    callback: (currentText: string) => void
-  ) => {
-    if (isDownloading || !loadedModel || isLoadingModel) return;
-    setGenerating(true);
-    stopSignal = false;
-    const result = '<tool_call>{"name": "list_exchanges", "arguments": {}}</tool_call>';
-    // const result = await wllamaInstance.createCompletion(input, {
-    //   nPredict: currParams.nPredict,
-    //   useCache: true,
-    //   sampling: {
-    //     temp: currParams.temperature,
-    //   },
-    //   // @ts-ignore unused variable
-    //   onNewToken(token, piece, currentText, optionals) {
-    //     console.log("LLM partial:", currentText);
-    //     callback(currentText);
-    //     if (stopSignal) optionals.abortSignal();
-    //   },
-    // });
-    console.log("=== RAW FINAL OUTPUT ===", input, stopSignal);
-    console.log(result);
-    callback(result);
-    stopSignal = false;
-    setGenerating(false);
-  };
+  input: string,
+  callback: (currentText: string) => void
+) => {
+  if (isDownloading || !loadedModel || isLoadingModel) return;
+  setGenerating(true);
+  stopSignal = false;
+
+  const result = await wllamaInstance.createCompletion(input, {
+    nPredict: currParams.nPredict,
+    useCache: true,
+    sampling: { temp: currParams.temperature },
+    // streaming tokens
+    onNewToken(token, piece, currentText, optionals) {
+      callback(currentText);
+      if (stopSignal) optionals.abortSignal();
+    },
+  });
+
+  console.log("=== RAW LLM OUTPUT ===", result);
+  callback(result);
+
+  // 🔎 Look for tool call in the LLM’s result
+  const toolCallMatch = result.match(/<tool_call>\s*([\s\S]*?)\s*<\/tool_call>/);
+  if (toolCallMatch) {
+    try {
+      const toolCall = JSON.parse(toolCallMatch[1]);
+      console.log("Parsed tool call:", toolCall);
+
+      // 🛠️ Dispatch to MCP server
+      const toolResponse = await callTool(toolCall.name, toolCall.arguments);
+      console.log("MCP tool response:", toolResponse);
+
+      // 📩 Feed back as if it was a message
+      const toolResponseMsg = `<tool_response>${JSON.stringify(toolResponse)}</tool_response>`;
+      callback(toolResponseMsg);
+    } catch (err) {
+      console.error("Error handling tool call:", err);
+    }
+  }
+
+  stopSignal = false;
+  setGenerating(false);
+};
+
+
+
+  // const createCompletion = async (
+  //   input: string,
+  //   callback: (currentText: string) => void
+  // ) => {
+  //   if (isDownloading || !loadedModel || isLoadingModel) return;
+  //   setGenerating(true);
+  //   stopSignal = false;
+  //   const result = '<tool_call>{"name": "list_exchanges", "arguments": {}}</tool_call>';
+
+  //   // const result = await wllamaInstance.createCompletion(input, {
+  //   //   nPredict: currParams.nPredict,
+  //   //   useCache: true,
+  //   //   sampling: {
+  //   //     temp: currParams.temperature,
+  //   //   },
+  //   //   // @ts-ignore unused variable
+  //   //   onNewToken(token, piece, currentText, optionals) {
+  //   //     console.log("LLM partial:", currentText);
+  //   //     callback(currentText);
+  //   //     if (stopSignal) optionals.abortSignal();
+  //   //   },
+  //   // });
+  //   console.log("=== RAW FINAL OUTPUT ===", input, stopSignal);
+  //   console.log(result);
+    
+  //   callback(result);
+  //   stopSignal = false;
+  //   setGenerating(false);
+  // };
 
   const stopCompletion = () => {
     stopSignal = true;
