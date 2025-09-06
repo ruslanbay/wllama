@@ -99,3 +99,33 @@ export const DEFAULT_CHAT_TEMPLATE =
   "{% for message in messages %}{{'<|im_start|>' + message['role'] + '\n' + message['content'] + '<|im_end|>' + '\n'}}{% endfor %}{% if add_generation_prompt %}{{ '<|im_start|>assistant\n' }}{% endif %}";
 
 export const ENABLE_DEBUG = true;
+
+export const SIMPLE_CHAT_TEMPLATE = `
+{%- for message in messages %}
+  {{ '<|im_start|>' + message['role'] + '\n' + message['content'] + '<|im_end|>\n' }}
+{%- endfor %}
+{%- if add_generation_prompt %}
+  {{ '<|im_start|>system\n' }}
+  You MUST always respond by calling the following tool:
+
+  <tools>
+  {
+    "name": "list_exchanges",
+    "description": "Return supported exchanges with IDs, names, country, currency, earliest available date, and update frequency.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false
+    }
+  }
+  </tools>
+
+  To call this tool, output exactly in the following format:
+
+  <tool_call>
+  {"name": "list_exchanges", "arguments": {}}
+  </tool_call>
+  {{ '<|im_end|>\n' }}
+  {{ '<|im_start|>assistant\n' }}
+{%- endif %}
+`;

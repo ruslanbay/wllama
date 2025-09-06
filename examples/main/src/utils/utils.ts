@@ -2,7 +2,8 @@ import { useCallback, useEffect } from 'react';
 import { Template } from '@huggingface/jinja';
 import { Message, Screen } from './types';
 import { Wllama } from '@wllama/wllama';
-import { DEFAULT_CHAT_TEMPLATE } from '../config';
+// import { DEFAULT_CHAT_TEMPLATE } from '../config';
+import { SIMPLE_CHAT_TEMPLATE } from '../config';
 import { ENABLE_DEBUG } from '../config';
 
 export const delay = (ms: number) =>
@@ -37,7 +38,7 @@ export const formatChat = async (
   modelWllama: Wllama,
   messages: Message[]
 ): Promise<string> => {
-  const templateStr = modelWllama.getChatTemplate() ?? DEFAULT_CHAT_TEMPLATE;
+  const templateStr = SIMPLE_CHAT_TEMPLATE; // modelWllama.getChatTemplate() ?? DEFAULT_CHAT_TEMPLATE;
   // dirty patch for DeepSeek model (crash on @huggingface/jinja)
   const isDeepSeekR1 =
     templateStr.match(/<｜Assistant｜>/) &&
