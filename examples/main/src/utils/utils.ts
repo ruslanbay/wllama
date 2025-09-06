@@ -3,6 +3,7 @@ import { Template } from '@huggingface/jinja';
 import { Message, Screen } from './types';
 import { Wllama } from '@wllama/wllama';
 import { DEFAULT_CHAT_TEMPLATE } from '../config';
+import { ENABLE_DEBUG } from '../config';
 
 export const delay = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
@@ -88,20 +89,24 @@ export const toHumanReadableSize = (bytes: number): string => {
 export const DebugLogger = {
   content: [] as string[],
   debug(...args: any) {
-    console.debug('🔧', ...args);
-    DebugLogger.content.push(`🔧 ${DebugLogger.argsToStr(args)}`);
+  if (!ENABLE_DEBUG) return;
+  console.debug('🔧', ...args);
+  DebugLogger.content.push(`🔧 ${DebugLogger.argsToStr(args)}`);
   },
   log(...args: any) {
-    console.log('ℹ️', ...args);
-    DebugLogger.content.push(`ℹ️ ${DebugLogger.argsToStr(args)}`);
+  if (!ENABLE_DEBUG) return;
+  console.log('ℹ️', ...args);
+  DebugLogger.content.push(`ℹ️ ${DebugLogger.argsToStr(args)}`);
   },
   warn(...args: any) {
-    console.warn('⚠️', ...args);
-    DebugLogger.content.push(`⚠️ ${DebugLogger.argsToStr(args)}`);
+  if (!ENABLE_DEBUG) return;
+  console.warn('⚠️', ...args);
+  DebugLogger.content.push(`⚠️ ${DebugLogger.argsToStr(args)}`);
   },
   error(...args: any) {
-    console.error('☠️', ...args);
-    DebugLogger.content.push(`☠️ ${DebugLogger.argsToStr(args)}`);
+  if (!ENABLE_DEBUG) return;
+  console.error('☠️', ...args);
+  DebugLogger.content.push(`☠️ ${DebugLogger.argsToStr(args)}`);
   },
   argsToStr(args: any[]): string {
     return args
