@@ -52,7 +52,7 @@ export const formatChat = async (
       } else if (message.role === 'user') {
         result += `<｜User｜>${message.content}`;
       } else {
-        result += `<｜Assistant｜>${message.content.split('</think>').pop()}<｜end▁of▁sentence｜>`;
+        result += `<｜Assistant｜>${message.content.replace(/<think>[\s\S]*?<\/think>/g, '').trim()}<｜end▁of▁sentence｜>`;
       }
     }
     return result + '<｜Assistant｜>';
