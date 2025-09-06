@@ -1,0 +1,37 @@
+name: Deploy to gh-pages
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          check-latest: true
+
+      - name: Install dependencies
+        run: |
+          cd examples/main
+          npm ci
+        
+      - name: Deploy
+        run: npm run deploy
+        
+      - name: Deploy to gh-pages
+        run: |
+          git config --local user.name 'github-actions[bot]'
+          git config --local user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git checkout --orphan gh-pages
+          git add -f docs/
+          git commit -m "Deploy Github Pages"
+          git push origin gh-pages --force
