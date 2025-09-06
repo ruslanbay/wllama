@@ -198,10 +198,13 @@ export const WllamaProvider = ({ children }: any) => {
       },
       // @ts-ignore unused variable
       onNewToken(token, piece, currentText, optionals) {
+        console.log("LLM partial:", currentText);
         callback(currentText);
         if (stopSignal) optionals.abortSignal();
       },
     });
+    console.log("=== RAW FINAL OUTPUT ===");
+    console.log(result);
     callback(result);
     stopSignal = false;
     setGenerating(false);
