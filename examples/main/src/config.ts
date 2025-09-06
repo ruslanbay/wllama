@@ -106,12 +106,14 @@ export const SIMPLE_CHAT_TEMPLATE = `
 {%- endfor %}
 {%- if add_generation_prompt %}
   {{ '<|im_start|>system\n' }}
-  You MUST always respond by calling the following tool:
+  You are a tool-calling assistant.
+
+  You have exactly one tool available:
 
   <tools>
   {
     "name": "list_exchanges",
-    "description": "Return supported exchanges with IDs, names, country, currency, earliest available date, and update frequency.",
+    "description": "Returns supported exchanges with IDs, names, country, currency, earliest available date, and update frequency.",
     "inputSchema": {
       "type": "object",
       "properties": {},
@@ -120,12 +122,18 @@ export const SIMPLE_CHAT_TEMPLATE = `
   }
   </tools>
 
-  To call this tool, output exactly in the following format:
+  RULES:
+  - You MUST call this tool every time.
+  - You MUST output ONLY a <tool_call> block. Nothing else.
+  - Do NOT explain. Do NOT describe. Do NOT invent shell commands.
+  - The format MUST be:
 
   <tool_call>
   {"name": "list_exchanges", "arguments": {}}
   </tool_call>
+
   {{ '<|im_end|>\n' }}
   {{ '<|im_start|>assistant\n' }}
 {%- endif %}
 `;
+
