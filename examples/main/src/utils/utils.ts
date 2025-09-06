@@ -41,8 +41,8 @@ export const formatChat = async (
   const templateStr = SIMPLE_CHAT_TEMPLATE; // modelWllama.getChatTemplate() ?? DEFAULT_CHAT_TEMPLATE;
   // dirty patch for DeepSeek model (crash on @huggingface/jinja)
   const isDeepSeekR1 =
-    templateStr.match(/<｜Assistant｜>/) &&
-    templateStr.match(/<｜User｜>/) &&
+    // templateStr.match(/<｜Assistant｜>/) &&
+    // templateStr.match(/<｜User｜>/) &&
     templateStr.match(/<\/think>/);
   if (isDeepSeekR1) {
     let result = '';
