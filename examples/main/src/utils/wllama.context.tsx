@@ -198,7 +198,7 @@ export const WllamaProvider = ({ children }: any) => {
   setGenerating(true);
   stopSignal = false;
 
-  const result = await wllamaInstance.createCompletion(input, {
+  let result = await wllamaInstance.createCompletion(input, {
     nPredict: currParams.nPredict,
     useCache: true,
     sampling: { temp: currParams.temperature },
@@ -211,6 +211,7 @@ export const WllamaProvider = ({ children }: any) => {
   });
 
   console.log("=== RAW LLM OUTPUT ===", result);
+  result = '<tool_call>{"name": "list_exchanges", "arguments": {}}</tool_call>';
   callback(result);
 
   // 🔎 Look for tool call in the LLM’s result
