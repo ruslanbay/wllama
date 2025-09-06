@@ -190,19 +190,20 @@ export const WllamaProvider = ({ children }: any) => {
     if (isDownloading || !loadedModel || isLoadingModel) return;
     setGenerating(true);
     stopSignal = false;
-    const result = await wllamaInstance.createCompletion(input, {
-      nPredict: currParams.nPredict,
-      useCache: true,
-      sampling: {
-        temp: currParams.temperature,
-      },
-      // @ts-ignore unused variable
-      onNewToken(token, piece, currentText, optionals) {
-        console.log("LLM partial:", currentText);
-        callback(currentText);
-        if (stopSignal) optionals.abortSignal();
-      },
-    });
+    const result = '<tool_call>{"name": "list_exchanges", "arguments": {}}</tool_call>';
+    // const result = await wllamaInstance.createCompletion(input, {
+    //   nPredict: currParams.nPredict,
+    //   useCache: true,
+    //   sampling: {
+    //     temp: currParams.temperature,
+    //   },
+    //   // @ts-ignore unused variable
+    //   onNewToken(token, piece, currentText, optionals) {
+    //     console.log("LLM partial:", currentText);
+    //     callback(currentText);
+    //     if (stopSignal) optionals.abortSignal();
+    //   },
+    // });
     console.log("=== RAW FINAL OUTPUT ===");
     console.log(result);
     callback(result);
