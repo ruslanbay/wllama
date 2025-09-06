@@ -204,7 +204,7 @@ export const WllamaProvider = ({ children }: any) => {
     //     if (stopSignal) optionals.abortSignal();
     //   },
     // });
-    console.log("=== RAW FINAL OUTPUT ===");
+    console.log("=== RAW FINAL OUTPUT ===", input, stopSignal);
     console.log(result);
     callback(result);
     stopSignal = false;
