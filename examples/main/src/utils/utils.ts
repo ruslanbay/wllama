@@ -89,24 +89,24 @@ export const toHumanReadableSize = (bytes: number): string => {
 export const DebugLogger = {
   content: [] as string[],
   debug(...args: any) {
-  if (!ENABLE_DEBUG) return;
-  console.debug('🔧', ...args);
-  DebugLogger.content.push(`🔧 ${DebugLogger.argsToStr(args)}`);
+    if (!ENABLE_DEBUG) return;
+    console.debug('🔧', ...args);
+    DebugLogger.content.push(`🔧 ${DebugLogger.argsToStr(args)}`);
   },
   log(...args: any) {
-  if (!ENABLE_DEBUG) return;
-  console.log('ℹ️', ...args);
-  DebugLogger.content.push(`ℹ️ ${DebugLogger.argsToStr(args)}`);
+    if (!ENABLE_DEBUG) return;
+    console.log('ℹ️', ...args);
+    DebugLogger.content.push(`ℹ️ ${DebugLogger.argsToStr(args)}`);
   },
   warn(...args: any) {
-  if (!ENABLE_DEBUG) return;
-  console.warn('⚠️', ...args);
-  DebugLogger.content.push(`⚠️ ${DebugLogger.argsToStr(args)}`);
+    if (!ENABLE_DEBUG) return;
+    console.warn('⚠️', ...args);
+    DebugLogger.content.push(`⚠️ ${DebugLogger.argsToStr(args)}`);
   },
   error(...args: any) {
-  if (!ENABLE_DEBUG) return;
-  console.error('☠️', ...args);
-  DebugLogger.content.push(`☠️ ${DebugLogger.argsToStr(args)}`);
+    if (!ENABLE_DEBUG) return;
+    console.error('☠️', ...args);
+    DebugLogger.content.push(`☠️ ${DebugLogger.argsToStr(args)}`);
   },
   argsToStr(args: any[]): string {
     return args
